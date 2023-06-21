@@ -1,17 +1,22 @@
 import express from "express";
 
-const app = express();
-const port = 3000;
+import dotenv from "dotenv";
+dotenv.config();
+
 import sendMail from "./email.service.js";
 import getCPTMStatus from "./cptm.service.js";
+
+const app = express();
+const port = process.env.PORT ?? 3000;
 
 app.get("/cptm-status", (req, res) => {
   getCPTMStatus(res).then(
     (data) => {
       try {
         sendMail(data.text, data.dataAtualizacao);
-        res.statusCode("200").send("Ok");
+        res.send("Ok");
       } catch (error) {
+        console.log(error);
         res.send({ message: "Erro ao enviar o e-mail", error });
       }
     },
@@ -23,5 +28,5 @@ app.get("/cptm-status", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`app listening on port ${port}`);
 });
