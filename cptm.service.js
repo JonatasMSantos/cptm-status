@@ -1,6 +1,7 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
-require("dotenv").config();
+import axios from "axios";
+import cheerio from "cheerio";
+
+const url = "https://www.cptm.sp.gov.br/Pages/Home.aspx";
 
 export default async function getCPTMStatus() {
   let response = await axios.get(url);

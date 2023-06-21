@@ -1,20 +1,22 @@
-const express = require("express");
+import express from "express";
+
 const app = express();
 const port = 3000;
-import getCPTMStatus from "./cptm.service";
-import sendMail from "./email.service";
-require("dotenv").config();
+import sendMail from "./email.service.js";
+import getCPTMStatus from "./cptm.service.js";
 
-app.get("/", (req, res) => {
+app.get("/cptm-status", (req, res) => {
   getCPTMStatus(res).then(
     (data) => {
       try {
         sendMail(data.text, data.dataAtualizacao);
+        res.statusCode("200").send("Ok");
       } catch (error) {
         res.send({ message: "Erro ao enviar o e-mail", error });
       }
     },
     (error) => {
+      console.log(error);
       res.send({ message: "Erro ao recuperar os dados da CPTM", error });
     }
   );
